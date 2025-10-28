@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>FRAGMENTS — AI Video Generator</title>
+  <style>
+    :root {
+      --bg: #0f0f0f;
+      --card: #121212;
+      --muted: #9aa0a6;
+      --accent: #36b3ff;
+      --white: #ffffff;
+      --radius: 12px;
+      font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+
+    html, body {
+      margin:0;
+      height:100%;
+      background:var(--bg);
+      color:var(--white);
+      display:flex;
+      justify-content:center;
+      align-items:flex-start;
+      padding:40px 20px;
+    }
+
+    .container { max-width: 920px; width: 100%; }
+    header { text-align:center; margin-bottom:36px; }
+    .brand { font-size:64px; font-weight:700; color:var(--accent); letter-spacing:1px; margin:0; }
+    .tagline { color:var(--muted); font-size:20px; margin-top:8px; line-height:1.4; }
+
+    .card {
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:var(--radius);
+      padding:28px;
+      box-shadow:0 6px 30px rgba(0,0,0,0.6);
+    }
+
+    .section-title { display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+    .section-title h2 { margin:0; font-size:28px; }
+    textarea {
+      width:100%;
+      min-height:120px;
+      resize:vertical;
+      background:transparent;
+      border-radius:10px;
+      border:2px solid rgba(255,255,255,0.06);
+      padding:18px;
+      color:var(--white);
+      font-size:18px;
+      outline:none;
+      box-sizing:border-box;
+    }
+
+    .checkbox-grid {
+      display:grid;
+      grid-template-columns:repeat(2, 1fr);
+      gap:14px 28px;
+      margin-top:22px;
+    }
+
+    .checkbox-item {
+      display:flex;
+      align-items:center;
+      gap:12px;
+      font-size:22px;
+      color:var(--white);
+    }
+
+    .checkbox-item input[type=checkbox] {
+      width:28px; height:28px; border-radius:6px; cursor:pointer;
+    }
+
+    .actions { display:flex; gap:18px; align-items:center; margin-top:26px; }
+
+    .btn {
+      background:var(--white);
+      color:var(--bg);
+      padding:10px 18px;
+      border-radius:8px;
+      border:none;
+      font-weight:700;
+      cursor:pointer;
+      box-shadow:0 6px 18px rgba(0,0,0,0.5);
+    }
+
+    .btn.secondary {
+      background:transparent;
+      border:2px solid rgba(255,255,255,0.06);
+      color:var(--white);
+    }
+
+    .powered {
+      text-align:center;
+      color:rgba(255,255,255,0.16);
+      margin-top:36px;
+      font-size:20px;
+    }
+
+    /* Loading bar */
+    #loading-bar {
+      position:relative;
+      width:100%;
+      height:8px;
+      background:#444;
+      border-radius:4px;
+      margin-top:10px;
+      display:none;
+    }
+
+    #loading-bar div {
+      position:absolute;
+      width:20px;
+      height:20px;
+      border-radius:50%;
+      background:limegreen;
+      top:-6px;
+      animation: move 1s infinite alternate;
+    }
+
+    @keyframes move {
+      0% { left:0; }
+      100% { left:calc(100% - 20px); }
+    }
+
+    @media (max-width:640px) {
+      .brand { font-size:44px; }
+      .checkbox-grid { grid-template-columns:1fr; }
+      .checkbox-item { font-size:20px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <h1 class="brand">FRAGMENTS</h1>
+      <p class="tagline">Harness the power of AI to create, generate, and innovate. Your creative journey starts here.</p>
+    </header>
+
+    <div class="card">
+      <div class="section-title"><span style="font-size:28px;">🎬</span><h2>AI Video Generator</h2></div>
+
+      <div>
+        <p>To generate your video, you need a voice file! You can <strong>download our free voice</strong> below:</p>
+        <a class="btn secondary" href="ElevenLabs_2025-10-27T18_46_26_Brian_pre_sp100_s50_sb75_se0_b_m2.mp3" download>⬇️ Download Free Voice (.mp3)</a>
+      </div>
+
+      <div style="margin-top:20px;">
+        <label>Upload Voice File (.mp3/.wav):</label>
+        <input type="file" id="voiceFile" accept=".mp3,.wav">
+      </div>
+
+      <div style="margin-top:20px;">
+        <label>Enter your prompt:</label>
+        <textarea id="prompt-input" placeholder="Write your story..."></textarea>
+      </div>
+
+      <div>
+        <h3>Select YouTube videos:</h3>
+        <div class="checkbox-grid" id="video-checkboxes">
+          <label class="checkbox-item"><input type="checkbox" value="https://youtu.be/tCBOhczn6Ok"> Video 1</label>
+          <label class="checkbox-item"><input type="checkbox" value="https://youtu.be/-LZceM7L8AE"> Video 2</label>
+          <label class="checkbox-item"><input type="checkbox" value="https://youtu.be/7mTTdWTw5p0"> Video 3</label>
+          <label class="checkbox-item"><input type="checkbox" value="https://youtu.be/_A3po0HYwkY"> Video 4</label>
+          <label class="checkbox-item"><input type="checkbox" value="https://youtu.be/-yPjP85CbQE"> Video 5</label>
+          <label class="checkbox-item"><input type="checkbox" value="https://youtu.be/_-2ZUciZgls"> Video 6</label>
+          <label class="checkbox-item"><input type="checkbox" value="https://youtu.be/t_r-ST06jR4"> Video 7</label>
+          <label class="checkbox-item"><input type="checkbox" value="https://youtu.be/s600FYgI5-s"> Video 8</label>
+          <label class="checkbox-item"><input type="checkbox" value="https://youtu.be/952ILTHDgC4"> Video 9</label>
+          <label class="checkbox-item"><input type="checkbox" value="https://youtu.be/u7kdVe8q5zs"> Video 10</label>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="generateBtn" class="btn" disabled>Generate</button>
+        <div id="loading-bar"><div></div></div>
+      </div>
+    </div>
+
+    <div class="powered">Powered by FRAGMENTS AI technology</div>
+  </div>
+
+  <script>
+    const generateBtn = document.getElementById('generateBtn');
+    const voiceInput = document.getElementById('voiceFile');
+    const loadingBar = document.getElementById('loading-bar');
+
+    // Enable button only when file uploaded
+    voiceInput.addEventListener('change', () => {
+      generateBtn.disabled = voiceInput.files.length === 0;
+    });
+
+    generateBtn.addEventListener('click', async () => {
+      if (voiceInput.files.length === 0) {
+        alert("To generate video, you need to upload a .mp3 or .wav file of the voice!");
+        return;
+      }
+
+      generateBtn.innerText = "Generating...";
+      loadingBar.style.display = "block";
+
+      const prompt = document.getElementById('prompt-input').value;
+      const videoLinks = Array.from(document.querySelectorAll('#video-checkboxes input:checked')).map(el => el.value);
+
+      const formData = new FormData();
+      formData.append("prompt", prompt);
+      formData.append("voice_file", voiceInput.files[0]);
+      videoLinks.forEach(link => formData.append("videoLinks", link));
+
+      const response = await fetch("/api/predict", { method: "POST", body: formData });
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "generated_video.mp4";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+
+      generateBtn.innerText = "Generate";
+      loadingBar.style.display = "none";
+    });
+  </script>
+</body>
+        </html>
